@@ -3,27 +3,26 @@ using System.Runtime.Serialization;
 
 namespace EventoInfrastructure.Exceptions.Events {
 
-    public class EventAlreadyExistsException : AlreadyExistsException {
+    public class EventNotFoundException : NotFoundException {
 
         /*------------------------ FIELDS REGION ------------------------*/
 
         /*------------------------ METHODS REGION ------------------------*/
-        public EventAlreadyExistsException() {
+        public EventNotFoundException() {
         }
 
-        public EventAlreadyExistsException(SerializationInfo info, StreamingContext context)
+        public EventNotFoundException(SerializationInfo info, StreamingContext context)
             : base(info, context) {
         }
 
-        public EventAlreadyExistsException(string message)
+        public EventNotFoundException(string message)
             : base(message) {
         }
 
-        public EventAlreadyExistsException(string message, Exception innerException)
+        public EventNotFoundException(string message, Exception innerException)
             : base(message, innerException) {
         }
 
     }
 
 }
-

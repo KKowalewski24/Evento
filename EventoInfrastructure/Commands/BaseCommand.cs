@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace EventoInfrastructure.DTO {
+namespace EventoInfrastructure.Commands {
 
-    public abstract class BaseDTO {
+    public abstract class BaseCommand {
 
         /*------------------------ FIELDS REGION ------------------------*/
         public Guid Id { get; set; }
 
         /*------------------------ METHODS REGION ------------------------*/
-        public BaseDTO() {
+        protected BaseCommand() {
         }
 
-        public BaseDTO(Guid id) {
+        protected BaseCommand(Guid id) {
             Id = id;
         }
 
