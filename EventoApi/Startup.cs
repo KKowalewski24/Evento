@@ -1,3 +1,7 @@
+using EventoCore.Repositories;
+using EventoInfrastructure.Mappers;
+using EventoInfrastructure.Repositories;
+using EventoInfrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +22,20 @@ namespace EventoApi {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            SetupScopedServices(services);
+            SetupSingletonServices(services);
+
             services.AddControllers();
+        }
+
+        private void SetupScopedServices(IServiceCollection services) {
+            services.AddScoped<IEventRepository, InMemoryEventRepository>();
+            services.AddScoped<IUserRepository, InMemoryUserRepository>();
+            services.AddScoped<IEventService, EventService>();
+        }
+
+        private static void SetupSingletonServices(IServiceCollection services) {
+            services.AddSingleton(AutoMapperConfig.Initialize());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,7 +50,7 @@ namespace EventoApi {
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
 
     }

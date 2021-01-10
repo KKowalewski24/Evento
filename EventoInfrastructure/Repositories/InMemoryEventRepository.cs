@@ -30,7 +30,7 @@ namespace EventoInfrastructure.Repositories {
         public async Task<IEnumerable<Event>> SearchByNameAsync(string name = "") {
             IEnumerable<Event> events = _events.AsEnumerable();
 
-            if (string.IsNullOrWhiteSpace(name)) {
+            if (!string.IsNullOrWhiteSpace(name)) {
                 events = events.Where((@event) => @event.Name.ToLowerInvariant()
                                           .Contains(name.ToLowerInvariant()));
             }

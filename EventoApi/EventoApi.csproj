@@ -5,15 +5,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\EventoInfrastructure\EventoInfrastructure.csproj" />
+        <ProjectReference Include="..\EventoInfrastructure\EventoInfrastructure.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Controllers" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="10.1.1" />
+        <PackageReference Include="AutoMapper" Version="10.1.1"/>
     </ItemGroup>
 
 </Project>
