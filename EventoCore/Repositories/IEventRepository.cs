@@ -13,11 +13,11 @@ namespace EventoCore.Repositories {
 
         Task<IEnumerable<Event>> SearchByNameAsync(string name = "");
 
-        Task<Event> AddAsync(Event @event);
+        Task AddAsync(Event @event);
 
-        Task<Event> UpdateAsync(Event @event);
+        Task UpdateAsync(Event @event);
 
-        Task<Event> DeleteAsync(Event @event);
+        Task DeleteAsync(Event @event);
 
     }
 
