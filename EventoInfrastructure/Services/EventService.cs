@@ -58,7 +58,19 @@ namespace EventoInfrastructure.Services {
         }
 
         public async Task UpdateAsync(Guid eventId, string name, string description) {
+            Event @event = await _eventRepository.GetByIdAsync(eventId);
+            if (@event == null) {
+                throw new EventNotFoundException();
+            }
 
+            @event = await _eventRepository.GetByNameAsync(name);
+            if (@event != null) {
+                throw new EventAlreadyExistsException();
+            }
+
+            @event.Name = name;
+            @event.Description = description;
+            await _eventRepository.UpdateAsync(@event);
         }
 
         public async Task DeleteByIdAsync(Guid eventId) {

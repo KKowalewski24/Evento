@@ -12,6 +12,7 @@ namespace EventoApi.Controllers {
     public class EventController : Controller {
 
         /*------------------------ FIELDS REGION ------------------------*/
+        public const string PARAM_EVENT_ID = "{eventId}";
         private readonly IEventService _eventService;
 
         /*------------------------ METHODS REGION ------------------------*/
@@ -27,7 +28,8 @@ namespace EventoApi.Controllers {
         [HttpPost]
         public async Task<IActionResult> Post(
             [FromBody]
-            CreateEventCommand createEventCommand) {
+            CreateEventCommand createEventCommand
+        ) {
             Guid eventId = Guid.NewGuid();
 
             await _eventService.CreateAsync(
@@ -40,6 +42,19 @@ namespace EventoApi.Controllers {
             );
 
             return Created(BASE_PATH_EVENT_CONTROLLER, null);
+        }
+
+        [HttpPut(PARAM_EVENT_ID)]
+        public async Task<IActionResult> Put(
+            Guid eventId,
+            [FromBody]
+            UpdateEventCommand updateEventCommand
+        ) {
+            await _eventService.UpdateAsync(
+                eventId, updateEventCommand.Name, updateEventCommand.Description
+            );
+
+            return NoContent();
         }
 
     }
