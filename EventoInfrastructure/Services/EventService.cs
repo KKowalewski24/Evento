@@ -5,6 +5,7 @@ using AutoMapper;
 using EventoCore.Domain;
 using EventoCore.Repositories;
 using EventoInfrastructure.DTO;
+using EventoInfrastructure.Exceptions.Events;
 
 namespace EventoInfrastructure.Services {
 
@@ -34,20 +35,33 @@ namespace EventoInfrastructure.Services {
             );
         }
 
-        public async Task CreateAsync(string name, string description,
+        public async Task CreateAsync(Guid eventId, string name, string description,
                                       DateTime startDate, DateTime endDate) {
+            if (await _eventRepository.GetByNameAsync(name) != null) {
+                throw new EventAlreadyExistsException();
+            }
+
+            await _eventRepository.AddAsync(
+                new Event(eventId, name, description, startDate, endDate)
+            );
+        }
+
+        public async Task AddTicketAsync(Guid eventId, int amount, double price) {
+            Event @event = await _eventRepository.GetByIdAsync(eventId);
+
+            if (@event == null) {
+                throw new EventNotFoundException();
+            }
+
+            @event.AddTickets(amount, price);
+            await _eventRepository.UpdateAsync(@event);
+        }
+
+        public async Task UpdateAsync(Guid eventId, string name, string description) {
 
         }
 
-        public async Task AddTicketAsync(Event @event, int amount, double price) {
-
-        }
-
-        public async Task UpdateAsync(Guid id, string name, string description) {
-
-        }
-
-        public async Task DeleteByIdAsync(Guid id) {
+        public async Task DeleteByIdAsync(Guid eventId) {
 
         }
 

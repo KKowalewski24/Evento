@@ -28,16 +28,6 @@ namespace EventoApi {
             services.AddControllers();
         }
 
-        private void SetupScopedServices(IServiceCollection services) {
-            services.AddScoped<IEventRepository, InMemoryEventRepository>();
-            services.AddScoped<IUserRepository, InMemoryUserRepository>();
-            services.AddScoped<IEventService, EventService>();
-        }
-
-        private static void SetupSingletonServices(IServiceCollection services) {
-            services.AddSingleton(AutoMapperConfig.Initialize());
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
@@ -51,6 +41,16 @@ namespace EventoApi {
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
+
+        private void SetupScopedServices(IServiceCollection services) {
+            services.AddScoped<IEventRepository, InMemoryEventRepository>();
+            services.AddScoped<IUserRepository, InMemoryUserRepository>();
+            services.AddScoped<IEventService, EventService>();
+        }
+
+        private static void SetupSingletonServices(IServiceCollection services) {
+            services.AddSingleton(AutoMapperConfig.Initialize());
         }
 
     }
