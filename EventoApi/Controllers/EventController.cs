@@ -13,6 +13,7 @@ namespace EventoApi.Controllers {
 
         /*------------------------ FIELDS REGION ------------------------*/
         public const string PARAM_EVENT_ID = "{eventId}";
+
         private readonly IEventService _eventService;
 
         /*------------------------ METHODS REGION ------------------------*/
@@ -26,12 +27,9 @@ namespace EventoApi.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(
-            [FromBody]
-            CreateEventCommand createEventCommand
-        ) {
+        public async Task<IActionResult> Post([FromBody]
+                                              CreateEventCommand createEventCommand) {
             Guid eventId = Guid.NewGuid();
-
             await _eventService.CreateAsync(
                 eventId, createEventCommand.Name, createEventCommand.Description,
                 createEventCommand.StartDate, createEventCommand.EndDate
@@ -45,14 +43,19 @@ namespace EventoApi.Controllers {
         }
 
         [HttpPut(PARAM_EVENT_ID)]
-        public async Task<IActionResult> Put(
-            Guid eventId,
-            [FromBody]
-            UpdateEventCommand updateEventCommand
-        ) {
+        public async Task<IActionResult> Put(Guid eventId,
+                                             [FromBody]
+                                             UpdateEventCommand updateEventCommand) {
             await _eventService.UpdateAsync(
                 eventId, updateEventCommand.Name, updateEventCommand.Description
             );
+
+            return NoContent();
+        }
+
+        [HttpDelete(PARAM_EVENT_ID)]
+        public async Task<IActionResult> Delete(Guid eventId) {
+            await _eventService.DeleteByIdAsync(eventId);
 
             return NoContent();
         }
