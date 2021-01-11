@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using EventoInfrastructure.DTO;
+using EventoInfrastructure.DTO.Events;
 
 namespace EventoInfrastructure.Services {
 

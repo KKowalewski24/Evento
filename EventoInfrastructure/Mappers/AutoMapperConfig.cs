@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using AutoMapper;
 using EventoCore.Domain;
-using EventoInfrastructure.DTO;
+using EventoInfrastructure.DTO.Events;
+using EventoInfrastructure.DTO.Tickets;
 
 namespace EventoInfrastructure.Mappers {
 

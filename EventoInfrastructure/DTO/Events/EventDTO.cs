@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventoInfrastructure.DTO {
+namespace EventoInfrastructure.DTO.Events {
 
     public class EventDTO : BaseDTO {
 

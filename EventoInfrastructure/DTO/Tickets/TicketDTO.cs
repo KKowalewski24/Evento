@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventoInfrastructure.DTO {
+namespace EventoInfrastructure.DTO.Tickets {
 
     public class TicketDTO : BaseDTO {
 

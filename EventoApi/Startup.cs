@@ -46,7 +46,7 @@ namespace EventoApi {
             services.AddScoped<IEventService, EventService>();
         }
 
-        private static void SetupSingletonServices(IServiceCollection services) {
+        private void SetupSingletonServices(IServiceCollection services) {
             services.AddSingleton(AutoMapperConfig.Initialize());
         }
 

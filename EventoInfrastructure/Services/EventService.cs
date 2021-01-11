@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventoCore.Domain;
 using EventoCore.Repositories;
-using EventoInfrastructure.DTO;
+using EventoInfrastructure.DTO.Events;
 using EventoInfrastructure.Exceptions.Events;
 using EventoInfrastructure.Extensions;
 
