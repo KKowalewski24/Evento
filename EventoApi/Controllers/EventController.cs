@@ -67,9 +67,10 @@ namespace EventoApi.Controllers {
                 );
 
                 return NoContent();
-            } catch (Exception e)
-                when (e is EventNotFoundException || e is EventAlreadyExistsException) {
+            } catch (EventNotFoundException) {
                 return NotFound();
+            } catch (EventAlreadyExistsException) {
+                return Conflict();
             }
         }
 
