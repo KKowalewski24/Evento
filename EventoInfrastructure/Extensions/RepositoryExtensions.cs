@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EventoCore.Domain;
 using EventoCore.Repositories;
 using EventoInfrastructure.Exceptions.Events;
+using EventoInfrastructure.Exceptions.Users;
 
 namespace EventoInfrastructure.Extensions {
 
@@ -25,6 +26,23 @@ namespace EventoInfrastructure.Extensions {
                                                     string name) {
             if (await eventRepository.GetByNameAsync(name) != null) {
                 throw new EventAlreadyExistsException();
+            }
+        }
+
+        public static async Task<User> GetUserOrFailAsync(this IUserRepository userRepository,
+                                                          Guid id) {
+            User user = await userRepository.GetByIdAsync(id);
+            if (user == null) {
+                throw new UserNotFoundException();
+            }
+
+            return user;
+        }
+
+        public static async Task CheckIfUserExists(this IUserRepository userRepository,
+                                                   string email) {
+            if (await userRepository.GetByEmailAsync(email) != null) {
+                throw new UserAlreadyExistsException();
             }
         }
 

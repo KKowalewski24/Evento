@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventoInfrastructure.Services.Users;
 using Microsoft.AspNetCore.Mvc;
 using static EventoApi.Constants.Constants;
 
@@ -10,8 +11,13 @@ namespace EventoApi.Controllers {
     public class AccountController : Controller {
 
         /*------------------------ FIELDS REGION ------------------------*/
+        private readonly IUserService _userService;
 
         /*------------------------ METHODS REGION ------------------------*/
+        public AccountController(IUserService userService) {
+            _userService = userService;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get() {
             throw new NotImplementedException();
