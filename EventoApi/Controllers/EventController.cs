@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EventoInfrastructure.Commands.Events;
-using EventoInfrastructure.DTO;
+using EventoInfrastructure.Exceptions.Events;
 using EventoInfrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using static EventoApi.Constants.Constants;
@@ -29,46 +29,58 @@ namespace EventoApi.Controllers {
 
         [HttpGet(PARAM_EVENT_ID)]
         public async Task<IActionResult> Get(Guid eventId) {
-            EventDetailsDTO eventDetails = await _eventService.GetByIdAsync(eventId);
-            if (eventDetails == null) {
+            try {
+                return Json(await _eventService.GetByIdAsync(eventId));
+            } catch (Exception e) when (e is NullReferenceException) {
                 return NotFound();
             }
-
-            return Json(eventDetails);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]
                                               CreateEventCommand createEventCommand) {
-            Guid eventId = Guid.NewGuid();
-            await _eventService.CreateAsync(
-                eventId, createEventCommand.Name, createEventCommand.Description,
-                createEventCommand.StartDate, createEventCommand.EndDate
-            );
+            try {
+                Guid eventId = Guid.NewGuid();
+                await _eventService.CreateAsync(
+                    eventId, createEventCommand.Name, createEventCommand.Description,
+                    createEventCommand.StartDate, createEventCommand.EndDate
+                );
 
-            await _eventService.AddTicketAsync(
-                eventId, createEventCommand.TicketsCount, createEventCommand.Price
-            );
+                await _eventService.AddTicketAsync(
+                    eventId, createEventCommand.TicketsCount, createEventCommand.Price
+                );
 
-            return Created(BASE_PATH_EVENT_CONTROLLER, null);
+                return Created($"/event/{eventId}", null);
+            } catch (Exception e)
+                when (e is EventAlreadyExistsException || e is EventNotFoundException) {
+                return NotFound();
+            }
         }
 
         [HttpPut(PARAM_EVENT_ID)]
         public async Task<IActionResult> Put(Guid eventId,
                                              [FromBody]
                                              UpdateEventCommand updateEventCommand) {
-            await _eventService.UpdateAsync(
-                eventId, updateEventCommand.Name, updateEventCommand.Description
-            );
+            try {
+                await _eventService.UpdateAsync(
+                    eventId, updateEventCommand.Name, updateEventCommand.Description
+                );
 
-            return NoContent();
+                return NoContent();
+            } catch (Exception e)
+                when (e is EventNotFoundException || e is EventAlreadyExistsException) {
+                return NotFound();
+            }
         }
 
         [HttpDelete(PARAM_EVENT_ID)]
         public async Task<IActionResult> Delete(Guid eventId) {
-            await _eventService.DeleteByIdAsync(eventId);
-
-            return NoContent();
+            try {
+                await _eventService.DeleteByIdAsync(eventId);
+                return NoContent();
+            } catch (EventNotFoundException) {
+                return NotFound();
+            }
         }
 
     }
