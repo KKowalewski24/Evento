@@ -23,6 +23,8 @@ namespace EventoInfrastructure.Mappers {
                 (eventDto) => eventDto.TicketsCount,
                 (memberConfig) => memberConfig.MapFrom((a) => a.Tickets.Count())
             );
+
+            config.CreateMap<Event, EventDetailsDTO>();
         }
 
         private static void ConfigureUserMapping(IMapperConfigurationExpression config) {
@@ -30,7 +32,7 @@ namespace EventoInfrastructure.Mappers {
         }
 
         private static void ConfigureTicketMapping(IMapperConfigurationExpression config) {
-            /*TODO*/
+            config.CreateMap<Ticket, TicketDTO>();
         }
 
     }

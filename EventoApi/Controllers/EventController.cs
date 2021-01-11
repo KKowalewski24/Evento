@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EventoInfrastructure.Commands.Events;
+using EventoInfrastructure.DTO;
 using EventoInfrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using static EventoApi.Constants.Constants;
@@ -24,6 +25,16 @@ namespace EventoApi.Controllers {
         [HttpGet]
         public async Task<IActionResult> Get(string name) {
             return Json(await _eventService.SearchByNameAsync(name));
+        }
+
+        [HttpGet(PARAM_EVENT_ID)]
+        public async Task<IActionResult> Get(Guid eventId) {
+            EventDetailsDTO eventDetails = await _eventService.GetByIdAsync(eventId);
+            if (eventDetails == null) {
+                return NotFound();
+            }
+
+            return Json(eventDetails);
         }
 
         [HttpPost]

@@ -22,12 +22,12 @@ namespace EventoInfrastructure.Services {
             _mapper = mapper;
         }
 
-        public async Task<EventDTO> GetByIdAsync(Guid id) {
-            return _mapper.Map<EventDTO>(await _eventRepository.GetByIdAsync(id));
+        public async Task<EventDetailsDTO> GetByIdAsync(Guid id) {
+            return _mapper.Map<EventDetailsDTO>(await _eventRepository.GetByIdAsync(id));
         }
 
-        public async Task<EventDTO> GetByNameAsync(string name) {
-            return _mapper.Map<EventDTO>(await _eventRepository.GetByNameAsync(name));
+        public async Task<EventDetailsDTO> GetByNameAsync(string name) {
+            return _mapper.Map<EventDetailsDTO>(await _eventRepository.GetByNameAsync(name));
         }
 
         public async Task<IEnumerable<EventDTO>> SearchByNameAsync(string name = null) {

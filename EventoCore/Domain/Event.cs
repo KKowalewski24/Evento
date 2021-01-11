@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EventoCore.Exceptions.Events;
 
 namespace EventoCore.Domain {
@@ -41,6 +42,12 @@ namespace EventoCore.Domain {
         public DateTime EndDate { get; private set; }
         public IEnumerable<Ticket> Tickets => _tickets;
 
+        public IEnumerable<Ticket> PurchasedTickets =>
+            _tickets.Where((ticket) => ticket.IsPurchased);
+
+        public IEnumerable<Ticket> AvailableTickets =>
+            _tickets.Where((ticket) => !ticket.IsPurchased);
+
         /*------------------------ METHODS REGION ------------------------*/
         protected Event() {
         }
@@ -68,7 +75,7 @@ namespace EventoCore.Domain {
             int seatNumber = _tickets.Count + 1;
 
             for (int i = 0; i < amount; i++) {
-                _tickets.Add(new Ticket(seatNumber, price, this));
+                _tickets.Add(new Ticket(seatNumber, price, Id));
                 seatNumber++;
             }
         }
