@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using EventoCore.Domain;
 using EventoCore.Repositories;
+using EventoInfrastructure.Exceptions.Users;
 using EventoInfrastructure.Extensions;
 
 namespace EventoInfrastructure.Services.Users {
@@ -20,6 +21,15 @@ namespace EventoInfrastructure.Services.Users {
                                         string password, UserRole role) {
             await _userRepository.CheckIfUserExists(email);
             await _userRepository.AddAsync(new User(id, name, email, password, role));
+        }
+
+        public async Task LoginAsync(string email, string password) {
+            const string invalidCredentials = "Invalid Credentials";
+            User user = await _userRepository.GetUserOrFailAsync(email, invalidCredentials);
+
+            if (user.Password != password) {
+                throw new UserNotFoundException(invalidCredentials);
+            }
         }
 
     }

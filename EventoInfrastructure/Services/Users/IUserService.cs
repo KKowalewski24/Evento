@@ -8,6 +8,8 @@ namespace EventoInfrastructure.Services.Users {
 
         Task RegisterAsync(Guid id, string name, string email, string password, UserRole role);
 
+        Task LoginAsync(string email, string password);
+
     }
 
 }

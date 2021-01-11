@@ -46,7 +46,8 @@ namespace EventoApi.Controllers {
         }
 
         [HttpPost(ACCOUNT_CONTROLLER_LOGIN)]
-        public async Task<IActionResult> PostTickets() {
+        public async Task<IActionResult> PostTickets([FromBody]
+                                                     LoginCommand loginCommand) {
             throw new NotImplementedException();
         }
 
