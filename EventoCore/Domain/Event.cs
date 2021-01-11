@@ -81,8 +81,8 @@ namespace EventoCore.Domain {
         }
 
         protected bool Equals(Event other) {
-            return base.Equals(other) && Equals(_tickets, other._tickets) && Name == other.Name &&
-                   Description == other.Description && CreateDate.Equals(other.CreateDate) &&
+            return base.Equals(other) && Equals(_tickets, other._tickets) && _name == other._name &&
+                   _description == other._description && CreateDate.Equals(other.CreateDate) &&
                    StartDate.Equals(other.StartDate) && UpdateDate.Equals(other.UpdateDate) &&
                    EndDate.Equals(other.EndDate);
         }
@@ -107,8 +107,9 @@ namespace EventoCore.Domain {
             unchecked {
                 int hashCode = base.GetHashCode();
                 hashCode = (hashCode * 397) ^ (_tickets != null ? _tickets.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Description != null ? Description.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (_name != null ? _name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^
+                           (_description != null ? _description.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ CreateDate.GetHashCode();
                 hashCode = (hashCode * 397) ^ StartDate.GetHashCode();
                 hashCode = (hashCode * 397) ^ UpdateDate.GetHashCode();
@@ -125,7 +126,9 @@ namespace EventoCore.Domain {
                    $"{nameof(StartDate)}: {StartDate}, " +
                    $"{nameof(UpdateDate)}: {UpdateDate}, " +
                    $"{nameof(EndDate)}: {EndDate}, " +
-                   $"{nameof(Tickets)}: {Tickets}";
+                   $"{nameof(Tickets)}: {Tickets}, " +
+                   $"{nameof(PurchasedTickets)}: {PurchasedTickets}, " +
+                   $"{nameof(AvailableTickets)}: {AvailableTickets}";
         }
 
     }

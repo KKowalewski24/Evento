@@ -30,21 +30,71 @@ namespace EventoCore.Domain {
             EventId = eventId;
         }
 
-        public Ticket(int seatNumber, double price, Guid eventId, Guid userId) {
+        public Ticket(int seatNumber, double price, Guid eventId, Guid userId, string userName) {
             SeatNumber = seatNumber;
             Price = price;
             EventId = eventId;
             UserId = userId;
+            UserName = userName;
             PurchaseData = DateTime.UtcNow;
         }
 
-        public Ticket(Guid id, int seatNumber, double price, Guid eventId, Guid userId)
+        public Ticket(Guid id, int seatNumber, double price, Guid eventId,
+                      Guid userId, string userName)
             : base(id) {
             SeatNumber = seatNumber;
             Price = price;
             EventId = eventId;
             UserId = userId;
+            UserName = userName;
             PurchaseData = DateTime.UtcNow;
+        }
+
+        protected bool Equals(Ticket other) {
+            return base.Equals(other) && SeatNumber == other.SeatNumber &&
+                   Price.Equals(other.Price) && EventId.Equals(other.EventId) &&
+                   Nullable.Equals(UserId, other.UserId) && UserName == other.UserName &&
+                   Nullable.Equals(PurchaseData, other.PurchaseData);
+        }
+
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType()) {
+                return false;
+            }
+
+            return Equals((Ticket)obj);
+        }
+
+        public override int GetHashCode() {
+            unchecked {
+                int hashCode = base.GetHashCode();
+                hashCode = (hashCode * 397) ^ SeatNumber;
+                hashCode = (hashCode * 397) ^ Price.GetHashCode();
+                hashCode = (hashCode * 397) ^ EventId.GetHashCode();
+                hashCode = (hashCode * 397) ^ UserId.GetHashCode();
+                hashCode = (hashCode * 397) ^ (UserName != null ? UserName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ PurchaseData.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        public override string ToString() {
+            return $"{base.ToString()}, " +
+                   $"{nameof(SeatNumber)}: {SeatNumber}, " +
+                   $"{nameof(Price)}: {Price}, " +
+                   $"{nameof(EventId)}: {EventId}, " +
+                   $"{nameof(UserId)}: {UserId}, " +
+                   $"{nameof(UserName)}: {UserName}, " +
+                   $"{nameof(PurchaseData)}: {PurchaseData}, " +
+                   $"{nameof(IsPurchased)}: {IsPurchased}";
         }
 
     }
