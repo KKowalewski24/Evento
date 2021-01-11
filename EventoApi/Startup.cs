@@ -1,7 +1,8 @@
 using EventoCore.Repositories;
 using EventoInfrastructure.Mappers;
 using EventoInfrastructure.Repositories;
-using EventoInfrastructure.Services;
+using EventoInfrastructure.Services.Events;
+using EventoInfrastructure.Services.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +45,7 @@ namespace EventoApi {
             services.AddScoped<IEventRepository, InMemoryEventRepository>();
             services.AddScoped<IUserRepository, InMemoryUserRepository>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         private void SetupSingletonServices(IServiceCollection services) {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using EventoInfrastructure.Commands.Events;
 using EventoInfrastructure.Exceptions.Events;
-using EventoInfrastructure.Services;
+using EventoInfrastructure.Services.Events;
 using Microsoft.AspNetCore.Mvc;
 using static EventoApi.Constants.Constants;
 

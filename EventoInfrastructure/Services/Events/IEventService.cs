@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventoInfrastructure.DTO.Events;
 
-namespace EventoInfrastructure.Services {
+namespace EventoInfrastructure.Services.Events {
 
     public interface IEventService {
 
