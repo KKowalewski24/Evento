@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using EventoCore.Exceptions.Events;
 
 namespace EventoCore.Domain {
 
@@ -7,14 +9,44 @@ namespace EventoCore.Domain {
 
         /*------------------------ FIELDS REGION ------------------------*/
         private readonly ISet<Ticket> _tickets = new HashSet<Ticket>();
+        private string _name;
+        private string _description;
 
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public string Name {
+            get => _name;
+            set {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new NameIsNullOrEmptyValueException();
+                }
+
+                _name = value;
+                UpdateDate = DateTime.UtcNow;
+            }
+        }
+
+        public string Description {
+            get => _description;
+            set {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new DescriptionIsNullOrEmptyValueException();
+                }
+
+                _description = value;
+                UpdateDate = DateTime.UtcNow;
+            }
+        }
+
         public DateTime CreateDate { get; private set; }
         public DateTime StartDate { get; private set; }
         public DateTime UpdateDate { get; private set; }
         public DateTime EndDate { get; private set; }
         public IEnumerable<Ticket> Tickets => _tickets;
+
+        public IEnumerable<Ticket> PurchasedTickets =>
+            _tickets.Where((ticket) => ticket.IsPurchased);
+
+        public IEnumerable<Ticket> AvailableTickets =>
+            _tickets.Where((ticket) => !ticket.IsPurchased);
 
         /*------------------------ METHODS REGION ------------------------*/
         protected Event() {
@@ -43,14 +75,14 @@ namespace EventoCore.Domain {
             int seatNumber = _tickets.Count + 1;
 
             for (int i = 0; i < amount; i++) {
-                _tickets.Add(new Ticket(seatNumber, price, this));
+                _tickets.Add(new Ticket(seatNumber, price, Id));
                 seatNumber++;
             }
         }
 
         protected bool Equals(Event other) {
-            return base.Equals(other) && Equals(_tickets, other._tickets) && Name == other.Name &&
-                   Description == other.Description && CreateDate.Equals(other.CreateDate) &&
+            return base.Equals(other) && Equals(_tickets, other._tickets) && _name == other._name &&
+                   _description == other._description && CreateDate.Equals(other.CreateDate) &&
                    StartDate.Equals(other.StartDate) && UpdateDate.Equals(other.UpdateDate) &&
                    EndDate.Equals(other.EndDate);
         }
@@ -75,8 +107,9 @@ namespace EventoCore.Domain {
             unchecked {
                 int hashCode = base.GetHashCode();
                 hashCode = (hashCode * 397) ^ (_tickets != null ? _tickets.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Description != null ? Description.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (_name != null ? _name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^
+                           (_description != null ? _description.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ CreateDate.GetHashCode();
                 hashCode = (hashCode * 397) ^ StartDate.GetHashCode();
                 hashCode = (hashCode * 397) ^ UpdateDate.GetHashCode();
@@ -93,7 +126,9 @@ namespace EventoCore.Domain {
                    $"{nameof(StartDate)}: {StartDate}, " +
                    $"{nameof(UpdateDate)}: {UpdateDate}, " +
                    $"{nameof(EndDate)}: {EndDate}, " +
-                   $"{nameof(Tickets)}: {Tickets}";
+                   $"{nameof(Tickets)}: {Tickets}, " +
+                   $"{nameof(PurchasedTickets)}: {PurchasedTickets}, " +
+                   $"{nameof(AvailableTickets)}: {AvailableTickets}";
         }
 
     }

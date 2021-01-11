@@ -10,11 +10,11 @@ namespace EventoCore.Repositories {
 
         Task<User> GetByEmailAsync(string email);
 
-        Task<User> AddAsync(User user);
+        Task AddAsync(User user);
 
-        Task<User> UpdateAsync(User user);
+        Task UpdateAsync(User user);
 
-        Task<User> DeleteAsync(User user);
+        Task DeleteAsync(User user);
 
     }
 
