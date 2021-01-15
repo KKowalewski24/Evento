@@ -3,7 +3,7 @@
 [*.cs]
 
 insert_final_newline = true
-max_line_length = 100
+max_line_length = 105
 
 csharp_new_line_before_catch = false
 csharp_new_line_before_else = false

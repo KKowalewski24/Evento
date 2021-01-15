@@ -17,24 +17,26 @@ namespace EventoApi {
     public class Startup {
 
         /*------------------------ FIELDS REGION ------------------------*/
-        private readonly string applicationUrl;
-        private readonly string securityKey;
+        private readonly string _applicationUrl;
+        private readonly string _securityKey;
+        private readonly int _expiryTimeInMinutes;
 
         public IConfiguration Configuration { get; }
 
         /*------------------------ METHODS REGION ------------------------*/
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
-            applicationUrl = Configuration.GetSection("ApplicationUrl").Value;
-            securityKey = Configuration.GetSection("SecurityKey").Value;
+            _applicationUrl = Configuration.GetValue<string>("Urls");
+            _securityKey = Configuration.GetValue<string>("JWT:SecurityKey");
+            _expiryTimeInMinutes = Configuration.GetValue<int>("JWT:ExpiryTimeInMinutes");
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            services.AddControllers();
             SetupScopedServices(services);
             SetupSingletonServices(services);
             SetupAuthentication(services);
-            SetupOthers(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +50,6 @@ namespace EventoApi {
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
-
         }
 
         private void SetupScopedServices(IServiceCollection services) {
@@ -69,14 +70,10 @@ namespace EventoApi {
             }).AddJwtBearer((option) => {
                 option.TokenValidationParameters = new TokenValidationParameters {
                     ValidateAudience = false,
-                    ValidIssuer = applicationUrl,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey))
+                    ValidIssuer = _applicationUrl,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securityKey))
                 };
             });
-        }
-
-        private void SetupOthers(IServiceCollection services) {
-            services.AddControllers();
         }
 
     }
