@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using EventoCore.Domain;
 using EventoCore.Repositories;
+using EventoCore.Security;
 using EventoInfrastructure.Exceptions.Users;
 using EventoInfrastructure.Extensions;
 
@@ -27,7 +28,7 @@ namespace EventoInfrastructure.Services.Users {
             const string invalidCredentials = "Invalid Credentials";
             User user = await _userRepository.GetUserOrFailAsync(email, invalidCredentials);
 
-            if (user.Password != password) {
+            if (user.Password != new HashingProvider().ComputeHashFromStringToString(password)) {
                 throw new UserNotFoundException(invalidCredentials);
             }
         }

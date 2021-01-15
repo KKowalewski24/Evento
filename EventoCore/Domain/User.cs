@@ -1,13 +1,21 @@
 ﻿using System;
+using EventoCore.Security;
 
 namespace EventoCore.Domain {
 
     public class User : BaseEntity {
 
         /*------------------------ FIELDS REGION ------------------------*/
+        private string _password;
+
         public string Name { get; private set; }
         public string Email { get; private set; }
-        public string Password { get; private set; }
+
+        public string Password {
+            get => _password;
+            set => _password = new HashingProvider().ComputeHashFromStringToString(value);
+        }
+
         public UserRole Role { get; private set; }
         public DateTime CreateDate { get; private set; }
 
