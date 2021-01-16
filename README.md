@@ -1,5 +1,10 @@
 # Evento .NET Web Application
 
+### API Documentation
+PostmanDocs directory contains files to import into Postman
+* Collection
+* Environment
+
 ### Code Style Rules and Formatter
 Formatter for this project: [dotnet-format](https://github.com/dotnet/format)
 ```
@@ -13,7 +18,7 @@ root = true
 [*.cs]
 
 insert_final_newline = true
-max_line_length = 100
+max_line_length = 105
 
 csharp_new_line_before_catch = false
 csharp_new_line_before_else = false
