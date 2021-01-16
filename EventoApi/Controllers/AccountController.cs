@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventoCore.Extensions;
 using EventoInfrastructure.Commands.Users;
 using EventoInfrastructure.Exceptions.Users;
 using EventoInfrastructure.Services.Users;
@@ -46,7 +47,7 @@ namespace EventoApi.Controllers {
             try {
                 await _userService.RegisterAsync(
                     Guid.NewGuid(), registerCommand.Name, registerCommand.Email,
-                    registerCommand.Password, registerCommand.Role
+                    registerCommand.Password, registerCommand.Role.FromStringToUserRole()
                 );
 
                 return Created(ACCOUNT_CONTROLLER_ACCOUNT, null);

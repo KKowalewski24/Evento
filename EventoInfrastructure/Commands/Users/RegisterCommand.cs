@@ -1,5 +1,4 @@
 ﻿using System;
-using EventoCore.Domain;
 
 namespace EventoInfrastructure.Commands.Users {
 
@@ -9,13 +8,13 @@ namespace EventoInfrastructure.Commands.Users {
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public UserRole Role { get; set; }
+        public string Role { get; set; }
 
         /*------------------------ METHODS REGION ------------------------*/
         public RegisterCommand() {
         }
 
-        public RegisterCommand(Guid id, string name, string email, string password, UserRole role)
+        public RegisterCommand(Guid id, string name, string email, string password, string role)
             : base(id) {
             Name = name;
             Email = email;
