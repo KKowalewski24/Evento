@@ -1,21 +1,29 @@
 ﻿using System;
+using EventoCore.Security;
 
 namespace EventoCore.Domain {
 
     public class User : BaseEntity {
 
         /*------------------------ FIELDS REGION ------------------------*/
+        private string _password;
+
         public string Name { get; private set; }
         public string Email { get; private set; }
-        public string Password { get; private set; }
-        public string Role { get; private set; }
+
+        public string Password {
+            get => _password;
+            set => _password = new HashingProvider().ComputeHashFromStringToString(value);
+        }
+
+        public UserRole Role { get; private set; }
         public DateTime CreateDate { get; private set; }
 
         /*------------------------ METHODS REGION ------------------------*/
         protected User() {
         }
 
-        public User(string name, string email, string password, string role) {
+        public User(string name, string email, string password, UserRole role) {
             Name = name;
             Email = email;
             Password = password;
@@ -23,7 +31,7 @@ namespace EventoCore.Domain {
             CreateDate = DateTime.UtcNow;
         }
 
-        public User(Guid id, string name, string email, string password, string role)
+        public User(Guid id, string name, string email, string password, UserRole role)
             : base(id) {
             Name = name;
             Email = email;
@@ -60,7 +68,7 @@ namespace EventoCore.Domain {
                 hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (Email != null ? Email.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (Password != null ? Password.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Role != null ? Role.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (int)Role;
                 hashCode = (hashCode * 397) ^ CreateDate.GetHashCode();
                 return hashCode;
             }

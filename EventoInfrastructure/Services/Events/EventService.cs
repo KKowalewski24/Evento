@@ -8,7 +8,7 @@ using EventoInfrastructure.DTO.Events;
 using EventoInfrastructure.Exceptions.Events;
 using EventoInfrastructure.Extensions;
 
-namespace EventoInfrastructure.Services {
+namespace EventoInfrastructure.Services.Events {
 
     public class EventService : IEventService {
 

@@ -15,6 +15,10 @@ namespace EventoInfrastructure.Commands {
             Id = id;
         }
 
+        public override string ToString() {
+            return $"{nameof(Id)}: {Id}";
+        }
+
     }
 
 }

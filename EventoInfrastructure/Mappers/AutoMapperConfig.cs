@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using EventoCore.Domain;
+using EventoInfrastructure.DTO.Accounts;
 using EventoInfrastructure.DTO.Events;
 using EventoInfrastructure.DTO.Tickets;
 
@@ -29,7 +30,7 @@ namespace EventoInfrastructure.Mappers {
         }
 
         private static void ConfigureUserMapping(IMapperConfigurationExpression config) {
-            /*TODO*/
+            config.CreateMap<User, AccountDTO>();
         }
 
         private static void ConfigureTicketMapping(IMapperConfigurationExpression config) {

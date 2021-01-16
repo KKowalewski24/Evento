@@ -13,6 +13,29 @@ namespace EventoInfrastructure.DTO.Events {
         public int TicketsCount { get; set; }
 
         /*------------------------ METHODS REGION ------------------------*/
+        public EventDTO() {
+        }
+
+        public EventDTO(Guid id, string name, string description, DateTime startDate,
+                        DateTime updateDate, DateTime endDate, int ticketsCount)
+            : base(id) {
+            Name = name;
+            Description = description;
+            StartDate = startDate;
+            UpdateDate = updateDate;
+            EndDate = endDate;
+            TicketsCount = ticketsCount;
+        }
+
+        public override string ToString() {
+            return $"{base.ToString()}, " +
+                   $"{nameof(Name)}: {Name}, " +
+                   $"{nameof(Description)}: {Description}, " +
+                   $"{nameof(StartDate)}: {StartDate}, " +
+                   $"{nameof(UpdateDate)}: {UpdateDate}, " +
+                   $"{nameof(EndDate)}: {EndDate}, " +
+                   $"{nameof(TicketsCount)}: {TicketsCount}";
+        }
 
     }
 
