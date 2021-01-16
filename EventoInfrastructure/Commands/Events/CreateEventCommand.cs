@@ -28,7 +28,7 @@ namespace EventoInfrastructure.Commands.Events {
         }
 
         public override string ToString() {
-            return $"{base.ToString()}, " + 
+            return $"{base.ToString()}, " +
                    $"{nameof(Name)}: {Name}, " +
                    $"{nameof(Description)}: {Description}, " +
                    $"{nameof(StartDate)}: {StartDate}, " +

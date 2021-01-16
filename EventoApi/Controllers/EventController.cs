@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EventoInfrastructure.Commands.Events;
 using EventoInfrastructure.Exceptions.Events;
 using EventoInfrastructure.Services.Events;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static EventoApi.Constants.Constants;
 
@@ -35,6 +36,7 @@ namespace EventoApi.Controllers {
         }
 
         [HttpPost]
+        [Authorize(Policy = POLICY_HAS_ADMIN_ROLE)]
         public async Task<IActionResult> Post([FromBody]
                                               CreateEventCommand createEventCommand) {
             try {
@@ -56,6 +58,7 @@ namespace EventoApi.Controllers {
         }
 
         [HttpPut(EVENT_CONTROLLER_PARAM_EVENT_ID)]
+        [Authorize(Policy = POLICY_HAS_ADMIN_ROLE)]
         public async Task<IActionResult> Put(Guid eventId,
                                              [FromBody]
                                              UpdateEventCommand updateEventCommand) {
@@ -73,6 +76,7 @@ namespace EventoApi.Controllers {
         }
 
         [HttpDelete(EVENT_CONTROLLER_PARAM_EVENT_ID)]
+        [Authorize(Policy = POLICY_HAS_ADMIN_ROLE)]
         public async Task<IActionResult> Delete(Guid eventId) {
             try {
                 await _eventService.DeleteByIdAsync(eventId);

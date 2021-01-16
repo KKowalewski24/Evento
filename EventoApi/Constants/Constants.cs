@@ -8,6 +8,7 @@ namespace EventoApi.Constants {
         public const string SLASH = "/";
         public const string CONTROLLER = "[controller]";
         public const string BASE_PATH = SLASH + CONTROLLER;
+        public const string POLICY_HAS_ADMIN_ROLE = "HasAdminRole";
 
         /* Event Controller Constants */
         public const string EVENT_CONTROLLER_EVENT = "event";

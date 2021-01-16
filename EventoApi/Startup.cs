@@ -1,5 +1,6 @@
-using System;
 using System.Text;
+using EventoCore.Domain;
+using EventoCore.Extensions;
 using EventoCore.Repositories;
 using EventoInfrastructure.Mappers;
 using EventoInfrastructure.Repositories;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using static EventoApi.Constants.Constants;
 
 namespace EventoApi {
 
@@ -37,6 +39,12 @@ namespace EventoApi {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
+            services.AddAuthorization((option) => {
+                option.AddPolicy(
+                    POLICY_HAS_ADMIN_ROLE,
+                    (policy) => policy.RequireRole(UserRole.Admin.FromEnumToString())
+                );
+            });
             SetupScopedServices(services);
             SetupSingletonServices(services);
             SetupAuthentication(services);
