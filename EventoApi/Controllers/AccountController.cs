@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EventoInfrastructure.Commands.Users;
 using EventoInfrastructure.Exceptions.Users;
 using EventoInfrastructure.Services.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static EventoApi.Constants.Constants;
 
@@ -15,14 +16,19 @@ namespace EventoApi.Controllers {
         /*------------------------ FIELDS REGION ------------------------*/
         private readonly IUserService _userService;
 
+        private Guid UserId => User?.Identity?.IsAuthenticated == true
+            ? Guid.Parse(User.Identity.Name)
+            : Guid.Empty;
+
         /*------------------------ METHODS REGION ------------------------*/
         public AccountController(IUserService userService) {
             _userService = userService;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get() {
-            throw new NotImplementedException();
+            return Json(await _userService.GetAccountAsync(UserId));
         }
 
         [HttpGet(ACCOUNT_CONTROLLER_TICKET)]
@@ -48,7 +54,7 @@ namespace EventoApi.Controllers {
         [HttpPost(ACCOUNT_CONTROLLER_LOGIN)]
         public async Task<IActionResult> PostTickets([FromBody]
                                                      LoginCommand loginCommand) {
-            throw new NotImplementedException();
+            return Json(await _userService.LoginAsync(loginCommand.Email, loginCommand.Password));
         }
 
     }

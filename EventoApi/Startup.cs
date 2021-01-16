@@ -1,9 +1,12 @@
+using System;
 using System.Text;
 using EventoCore.Repositories;
 using EventoInfrastructure.Mappers;
 using EventoInfrastructure.Repositories;
 using EventoInfrastructure.Services.Events;
+using EventoInfrastructure.Services.Jwt;
 using EventoInfrastructure.Services.Users;
+using EventoInfrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,8 +29,8 @@ namespace EventoApi {
         /*------------------------ METHODS REGION ------------------------*/
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
-            _applicationUrl = Configuration.GetValue<string>("Urls");
             _securityKey = Configuration.GetValue<string>("JWT:SecurityKey");
+            _applicationUrl = Configuration.GetValue<string>("JWT:ApplicationUrl");
             _expiryTimeInMinutes = Configuration.GetValue<int>("JWT:ExpiryTimeInMinutes");
         }
 
@@ -61,6 +64,11 @@ namespace EventoApi {
 
         private void SetupSingletonServices(IServiceCollection services) {
             services.AddSingleton(AutoMapperConfig.Initialize());
+            services.AddSingleton<IJwtService, JwtService>();
+            services.AddSingleton(new JwtSettings(_securityKey, _applicationUrl, _expiryTimeInMinutes));
+
+            // This is another approach when you cast automatically sub-object from appsettings.json
+            // services.Configure<JwtSettings>(Configuration.GetSection("JWT"));
         }
 
         private void SetupAuthentication(IServiceCollection services) {
