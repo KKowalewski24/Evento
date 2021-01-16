@@ -16,6 +16,11 @@ namespace EventoInfrastructure.DTO.Jwt {
             Role = role;
         }
 
+        public override string ToString() {
+            return $"{base.ToString()}, " +
+                   $"{nameof(Role)}: {Role}";
+        }
+
     }
 
 }

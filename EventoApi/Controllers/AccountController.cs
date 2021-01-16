@@ -28,7 +28,11 @@ namespace EventoApi.Controllers {
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Get() {
-            return Json(await _userService.GetAccountAsync(UserId));
+            try {
+                return Json(await _userService.GetAccountAsync(UserId));
+            } catch (UserNotFoundException) {
+                return NotFound();
+            }
         }
 
         [HttpGet(ACCOUNT_CONTROLLER_TICKET)]
@@ -54,7 +58,11 @@ namespace EventoApi.Controllers {
         [HttpPost(ACCOUNT_CONTROLLER_LOGIN)]
         public async Task<IActionResult> PostTickets([FromBody]
                                                      LoginCommand loginCommand) {
-            return Json(await _userService.LoginAsync(loginCommand.Email, loginCommand.Password));
+            try {
+                return Json(await _userService.LoginAsync(loginCommand.Email, loginCommand.Password));
+            } catch (UserNotFoundException) {
+                return NotFound();
+            }
         }
 
     }

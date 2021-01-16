@@ -14,6 +14,31 @@ namespace EventoInfrastructure.DTO.Tickets {
         public bool IsPurchased { get; set; }
 
         /*------------------------ METHODS REGION ------------------------*/
+        public TicketDTO() {
+        }
+
+        public TicketDTO(Guid id, int seatNumber, double price, Guid eventId, Guid? userId,
+                         string userName, DateTime? purchaseData, bool isPurchased)
+            : base(id) {
+            SeatNumber = seatNumber;
+            Price = price;
+            EventId = eventId;
+            UserId = userId;
+            UserName = userName;
+            PurchaseData = purchaseData;
+            IsPurchased = isPurchased;
+        }
+
+        public override string ToString() {
+            return $"{base.ToString()}, " +
+                   $"{nameof(SeatNumber)}: {SeatNumber}," +
+                   $" {nameof(Price)}: {Price}," +
+                   $" {nameof(EventId)}: {EventId}, " +
+                   $"{nameof(UserId)}: {UserId}, " +
+                   $"{nameof(UserName)}: {UserName}, " +
+                   $"{nameof(PurchaseData)}: {PurchaseData}, " +
+                   $"{nameof(IsPurchased)}: {IsPurchased}";
+        }
 
     }
 

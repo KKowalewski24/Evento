@@ -15,6 +15,10 @@ namespace EventoInfrastructure.DTO {
             Id = id;
         }
 
+        public override string ToString() {
+            return $"{nameof(Id)}: {Id}";
+        }
+
     }
 
 }

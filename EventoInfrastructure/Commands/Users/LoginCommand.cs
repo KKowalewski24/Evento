@@ -7,6 +7,19 @@
         public string Password { get; set; }
 
         /*------------------------ METHODS REGION ------------------------*/
+        public LoginCommand() {
+        }
+
+        public LoginCommand(string email, string password) {
+            Email = email;
+            Password = password;
+        }
+
+        public override string ToString() {
+            return $"{base.ToString()}, " +
+                   $"{nameof(Email)}: {Email}, " +
+                   $"{nameof(Password)}: {Password}";
+        }
 
     }
 
