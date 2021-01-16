@@ -1,4 +1,5 @@
 ﻿using System;
+using EventoCore.Exceptions.Tickets;
 
 namespace EventoCore.Domain {
 
@@ -48,6 +49,26 @@ namespace EventoCore.Domain {
             UserId = userId;
             UserName = userName;
             PurchaseData = DateTime.UtcNow;
+        }
+
+        public void Purchase(User user) {
+            if (IsPurchased) {
+                throw new TicketAlreadyPurchased();
+            }
+
+            UserId = user.Id;
+            UserName = user.Name;
+            PurchaseData = DateTime.UtcNow;
+        }
+
+        public void Cancel() {
+            if (!IsPurchased) {
+                throw new TicketNotPurchased();
+            }
+
+            UserId = null;
+            UserName = null;
+            PurchaseData = null;
         }
 
         protected bool Equals(Ticket other) {

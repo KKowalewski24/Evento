@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EventoCore.Exceptions.Events;
+using EventoCore.Exceptions.Tickets;
 
 namespace EventoCore.Domain {
 
@@ -77,6 +78,27 @@ namespace EventoCore.Domain {
             for (int i = 0; i < amount; i++) {
                 _tickets.Add(new Ticket(seatNumber, price, Id));
                 seatNumber++;
+            }
+        }
+
+        public void PurchaseTickets(User user, int amount) {
+            if (AvailableTickets.Count() < amount) {
+                throw new TicketsOutOfAmountException();
+            }
+
+            foreach (Ticket ticket in AvailableTickets.Take(amount)) {
+                ticket.Purchase(user);
+            }
+        }
+
+        public void CancelPurchasedTickets(User user, int amount) {
+            IEnumerable<Ticket> tickets = PurchasedTickets.Where((ticket) => ticket.UserId == user.Id);
+            if (tickets.Count() < amount) {
+                throw new TicketsNotEnoughException();
+            }
+
+            foreach (Ticket ticket in tickets) {
+                ticket.Cancel();
             }
         }
 
