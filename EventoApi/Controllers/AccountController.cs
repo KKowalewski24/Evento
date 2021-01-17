@@ -36,7 +36,7 @@ namespace EventoApi.Controllers {
             }
         }
 
-        [HttpGet(ACCOUNT_CONTROLLER_TICKET)]
+        [HttpGet(TICKET_CONTROLLER_TICKET)]
         public async Task<IActionResult> GetTickets() {
             throw new NotImplementedException();
         }
