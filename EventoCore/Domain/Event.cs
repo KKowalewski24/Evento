@@ -97,7 +97,7 @@ namespace EventoCore.Domain {
                 throw new TicketsNotEnoughException();
             }
 
-            foreach (Ticket ticket in tickets) {
+            foreach (Ticket ticket in tickets.Take(amount)) {
                 ticket.Cancel();
             }
         }

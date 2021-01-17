@@ -15,8 +15,10 @@ namespace EventoInfrastructure.DTO.Events {
 
         public EventDetailsDTO(Guid id, string name, string description, DateTime startDate,
                                DateTime updateDate, DateTime endDate, int ticketsCount,
+                               int purchasedTicketsCount, int availableTicketsCount,
                                IEnumerable<TicketDTO> tickets)
-            : base(id, name, description, startDate, updateDate, endDate, ticketsCount) {
+            : base(id, name, description, startDate, updateDate, endDate, ticketsCount,
+                   purchasedTicketsCount, availableTicketsCount) {
             Tickets = tickets;
         }
 
