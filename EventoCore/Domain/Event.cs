@@ -17,7 +17,7 @@ namespace EventoCore.Domain {
             get => _name;
             set {
                 if (string.IsNullOrWhiteSpace(value)) {
-                    throw new NameIsNullOrEmptyValueException();
+                    throw new EventNameIsNullOrEmptyValueException();
                 }
 
                 _name = value;
@@ -57,10 +57,9 @@ namespace EventoCore.Domain {
             : base(id) {
             Name = name;
             Description = description;
+            SetDates(startDate, endDate);
             CreateDate = DateTime.UtcNow;
-            StartDate = startDate;
             UpdateDate = DateTime.UtcNow;
-            EndDate = endDate;
         }
 
         public void AddTickets(int amount, double price) {
@@ -95,6 +94,15 @@ namespace EventoCore.Domain {
 
         public IEnumerable<Ticket> GetTicketsPurchasedByUser(User user) {
             return PurchasedTickets.Where((ticket) => ticket.UserId == user.Id);
+        }
+
+        private void SetDates(DateTime startDate, DateTime endData) {
+            if (startDate >= endData) {
+                throw new StartDateEndDateWrongValueException();
+            }
+
+            StartDate = startDate;
+            EndDate = endData;
         }
 
         protected bool Equals(Event other) {
