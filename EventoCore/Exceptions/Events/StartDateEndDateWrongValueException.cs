@@ -3,23 +3,23 @@ using System.Runtime.Serialization;
 
 namespace EventoCore.Exceptions.Events {
 
-    public class NameIsNullOrEmptyValueException : NullOrEmptyValueException {
+    public class StartDateEndDateWrongValueException : WrongValueException {
 
         /*------------------------ FIELDS REGION ------------------------*/
 
         /*------------------------ METHODS REGION ------------------------*/
-        public NameIsNullOrEmptyValueException() {
+        public StartDateEndDateWrongValueException() {
         }
 
-        public NameIsNullOrEmptyValueException(SerializationInfo info, StreamingContext context)
+        public StartDateEndDateWrongValueException(SerializationInfo info, StreamingContext context)
             : base(info, context) {
         }
 
-        public NameIsNullOrEmptyValueException(string message)
+        public StartDateEndDateWrongValueException(string message)
             : base(message) {
         }
 
-        public NameIsNullOrEmptyValueException(string message, Exception innerException)
+        public StartDateEndDateWrongValueException(string message, Exception innerException)
             : base(message, innerException) {
         }
 
