@@ -3,23 +3,23 @@ using System.Runtime.Serialization;
 
 namespace EventoCore.Exceptions.Users {
 
-    public class EmailNullOrEmptyValueException : NullOrEmptyValueException {
+    public class EmailIsNullOrEmptyValueException : NullOrEmptyValueException {
 
         /*------------------------ FIELDS REGION ------------------------*/
 
         /*------------------------ METHODS REGION ------------------------*/
-        public EmailNullOrEmptyValueException() {
+        public EmailIsNullOrEmptyValueException() {
         }
 
-        public EmailNullOrEmptyValueException(SerializationInfo info, StreamingContext context)
+        public EmailIsNullOrEmptyValueException(SerializationInfo info, StreamingContext context)
             : base(info, context) {
         }
 
-        public EmailNullOrEmptyValueException(string message)
+        public EmailIsNullOrEmptyValueException(string message)
             : base(message) {
         }
 
-        public EmailNullOrEmptyValueException(string message, Exception innerException)
+        public EmailIsNullOrEmptyValueException(string message, Exception innerException)
             : base(message, innerException) {
         }
 

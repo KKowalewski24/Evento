@@ -1,4 +1,5 @@
 ﻿using System;
+using EventoCore.Exceptions.Users;
 using EventoCore.Security;
 
 namespace EventoCore.Domain {
@@ -7,13 +8,40 @@ namespace EventoCore.Domain {
 
         /*------------------------ FIELDS REGION ------------------------*/
         private string _password;
+        private string _name;
+        private string _email;
 
-        public string Name { get; private set; }
-        public string Email { get; private set; }
+        public string Name {
+            get => _name;
+            set {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new UserNameIsNullOrEmptyValueException();
+                }
+
+                _name = value;
+            }
+        }
+
+        public string Email {
+            get => _email;
+            set {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new EmailIsNullOrEmptyValueException();
+                }
+
+                _email = value;
+            }
+        }
 
         public string Password {
             get => _password;
-            set => _password = new HashingProvider().ComputeHashFromStringToString(value);
+            set {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new PasswordIsNullOrEmptyValueException();
+                }
+
+                _password = new HashingProvider().ComputeHashFromStringToString(value);
+            }
         }
 
         public UserRole Role { get; private set; }
