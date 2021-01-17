@@ -23,14 +23,6 @@ namespace EventoCore.Domain {
         protected User() {
         }
 
-        public User(string name, string email, string password, UserRole role) {
-            Name = name;
-            Email = email;
-            Password = password;
-            Role = role;
-            CreateDate = DateTime.UtcNow;
-        }
-
         public User(Guid id, string name, string email, string password, UserRole role)
             : base(id) {
             Name = name;

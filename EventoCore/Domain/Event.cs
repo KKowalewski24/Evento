@@ -53,15 +53,6 @@ namespace EventoCore.Domain {
         protected Event() {
         }
 
-        public Event(string name, string description, DateTime startDate, DateTime endDate) {
-            Name = name;
-            Description = description;
-            CreateDate = DateTime.UtcNow;
-            StartDate = startDate;
-            UpdateDate = DateTime.UtcNow;
-            EndDate = endDate;
-        }
-
         public Event(Guid id, string name, string description, DateTime startDate, DateTime endDate)
             : base(id) {
             Name = name;
