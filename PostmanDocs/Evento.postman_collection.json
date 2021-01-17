@@ -1,0 +1,326 @@
+{
+	"info": {
+		"_postman_id": "5946415b-c9a4-42a6-8bcd-2239401de6be",
+		"name": "Evento",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"test@test.com\", \"password\": \"secret\", \"name\": \"Test user\", \"role\": \"admin\"}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointAccount}}/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointAccount}}",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get account",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer PASTE_TOKEN_HERE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointAccount}}/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointAccount}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"test@test.com\", \"password\": \"secret\"}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointAccount}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointAccount}}",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get tickets for account",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer PASTE_TOKEN_HERE"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointAccount}}/{{endpointTicket}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointAccount}}",
+								"{{endpointTicket}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "Get events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointEvent}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointEvent}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get event",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointEvent}}/event_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointEvent}}",
+								"event_id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer PASTE_TOKEN_HERE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"My event\",\n\t\"description\": \"My event description\",\n\t\"startDate\": \"2017-06-07\",\n\t\"endDate\": \"2017-06-08\",\n\t\"ticketsCount\": 1000,\n\t\"price\": 50\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointEvent}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointEvent}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update event",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer PASTE_TOKEN_HERE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"My updated event\",\n\t\"description\": \"My updated event description\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointEvent}}/event_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointEvent}}",
+								"event_id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete event",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer PASTE_TOKEN_HERE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointEvent}}/event_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointEvent}}",
+								"event_id"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tickets",
+			"item": [
+				{
+					"name": "Get ticket",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer PASTE_TOKEN_HERE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointEvent}}/event_id/{{endpointTicket}}/ticket_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointEvent}}",
+								"event_id",
+								"{{endpointTicket}}",
+								"ticket_id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Purchase tickets",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer PASTE_TOKEN_HERE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointEvent}}/event_id{{endpointTicket}}/purchase/amount",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointEvent}}",
+								"event_id{{endpointTicket}}",
+								"purchase",
+								"amount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel tickets",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer PASTE_TOKEN_HERE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{endpointEvent}}/event_id/{{endpointTicket}}/cancel/amount",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{endpointEvent}}",
+								"event_id",
+								"{{endpointTicket}}",
+								"cancel",
+								"amount"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
