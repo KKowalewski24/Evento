@@ -10,7 +10,7 @@ namespace EventoInfrastructure.DTO.Tickets {
         public Guid EventId { get; set; }
         public Guid? UserId { get; set; }
         public string UserName { get; set; }
-        public DateTime? PurchaseData { get; set; }
+        public DateTime? PurchaseDate { get; set; }
         public bool IsPurchased { get; set; }
 
         /*------------------------ METHODS REGION ------------------------*/
@@ -18,14 +18,14 @@ namespace EventoInfrastructure.DTO.Tickets {
         }
 
         public TicketDTO(Guid id, int seatNumber, double price, Guid eventId, Guid? userId,
-                         string userName, DateTime? purchaseData, bool isPurchased)
+                         string userName, DateTime? purchaseDate, bool isPurchased)
             : base(id) {
             SeatNumber = seatNumber;
             Price = price;
             EventId = eventId;
             UserId = userId;
             UserName = userName;
-            PurchaseData = purchaseData;
+            PurchaseDate = purchaseDate;
             IsPurchased = isPurchased;
         }
 
@@ -36,7 +36,7 @@ namespace EventoInfrastructure.DTO.Tickets {
                    $" {nameof(EventId)}: {EventId}, " +
                    $"{nameof(UserId)}: {UserId}, " +
                    $"{nameof(UserName)}: {UserName}, " +
-                   $"{nameof(PurchaseData)}: {PurchaseData}, " +
+                   $"{nameof(PurchaseDate)}: {PurchaseDate}, " +
                    $"{nameof(IsPurchased)}: {IsPurchased}";
         }
 
