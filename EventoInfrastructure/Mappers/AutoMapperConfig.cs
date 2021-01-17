@@ -46,6 +46,7 @@ namespace EventoInfrastructure.Mappers {
 
         private static void ConfigureTicketMapping(IMapperConfigurationExpression config) {
             config.CreateMap<Ticket, TicketDTO>();
+            config.CreateMap<Ticket, TicketDetailsDTO>();
         }
 
     }

@@ -32,15 +32,25 @@ namespace EventoInfrastructure.Services.Tickets {
             return _mapper.Map<TicketDTO>(ticket);
         }
 
-        public async Task<IEnumerable<TicketDTO>> GetTicketsForUserAsync(Guid userId) {
+        public async Task<IEnumerable<TicketDetailsDTO>> GetTicketsForUserAsync(Guid userId) {
             User user = await _userRepository.GetUserOrFailAsync(userId);
             IEnumerable<Event> events = await _eventRepository.SearchByNameAsync();
+            List<TicketDetailsDTO> allTickets = new List<TicketDetailsDTO>();
 
-            IEnumerable<Ticket> tickets = events.SelectMany((@event) => {
-                return @event.GetTicketsPurchasedByUser(user);
-            });
+            foreach (Event @event in events) {
+                List<TicketDetailsDTO> ticketDetailsDtos = _mapper
+                    .Map<IEnumerable<TicketDetailsDTO>>(@event.GetTicketsPurchasedByUser(user))
+                    .ToList();
 
-            return _mapper.Map<IEnumerable<TicketDTO>>(tickets);
+                foreach (TicketDetailsDTO ticket in ticketDetailsDtos) {
+                    ticket.EventId = @event.Id;
+                    ticket.EventName = @event.Name;
+                }
+
+                allTickets.AddRange(ticketDetailsDtos);
+            }
+
+            return allTickets;
         }
 
         public async Task PurchaseAsync(Guid userId, Guid eventId, int amount) {
