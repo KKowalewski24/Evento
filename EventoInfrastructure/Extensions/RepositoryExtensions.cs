@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventoCore.Domain;
 using EventoCore.Repositories;
 using EventoInfrastructure.Exceptions.Events;
+using EventoInfrastructure.Exceptions.Tickets;
 using EventoInfrastructure.Exceptions.Users;
 
 namespace EventoInfrastructure.Extensions {
@@ -51,10 +53,29 @@ namespace EventoInfrastructure.Extensions {
         }
 
         public static async Task CheckIfUserExists(this IUserRepository userRepository,
+                                                   Guid id, string exceptionMessage = "") {
+            if (await userRepository.GetByIdAsync(id) != null) {
+                throw new UserAlreadyExistsException(exceptionMessage);
+            }
+        }
+
+        public static async Task CheckIfUserExists(this IUserRepository userRepository,
                                                    string email, string exceptionMessage = "") {
             if (await userRepository.GetByEmailAsync(email) != null) {
                 throw new UserAlreadyExistsException(exceptionMessage);
             }
+        }
+
+        public static async Task<Ticket> GetTicketOrFailAsync(this IEventRepository eventRepository,
+                                                              Guid eventId, Guid ticketId,
+                                                              string exceptionMessage = "") {
+            Event @event = await eventRepository.GetEventOrFailAsync(eventId);
+            Ticket ticket = @event.Tickets.SingleOrDefault((ticket) => ticket.Id == ticketId);
+            if (ticket == null) {
+                throw new TicketNotFoundException(exceptionMessage);
+            }
+
+            return ticket;
         }
 
     }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventoCore.Exceptions.Enums;
 using EventoCore.Extensions;
 using EventoInfrastructure.Commands.Users;
+using EventoInfrastructure.Exceptions;
 using EventoInfrastructure.Exceptions.Users;
+using EventoInfrastructure.Services.Tickets;
 using EventoInfrastructure.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +19,16 @@ namespace EventoApi.Controllers {
 
         /*------------------------ FIELDS REGION ------------------------*/
         private readonly IUserService _userService;
+        private readonly ITicketService _ticketService;
 
         private Guid UserId => User?.Identity?.IsAuthenticated == true
             ? Guid.Parse(User.Identity.Name)
             : Guid.Empty;
 
         /*------------------------ METHODS REGION ------------------------*/
-        public AccountController(IUserService userService) {
+        public AccountController(IUserService userService, ITicketService ticketService) {
             _userService = userService;
+            _ticketService = ticketService;
         }
 
         [HttpGet]
@@ -36,9 +41,14 @@ namespace EventoApi.Controllers {
             }
         }
 
-        [HttpGet(ACCOUNT_CONTROLLER_TICKET)]
+        [HttpGet(TICKET_CONTROLLER_TICKET)]
+        [Authorize]
         public async Task<IActionResult> GetTickets() {
-            throw new NotImplementedException();
+            try {
+                return Json(await _ticketService.GetTicketsForUserAsync(UserId));
+            } catch (NotFoundException) {
+                return NotFound();
+            }
         }
 
         [HttpPost(ACCOUNT_CONTROLLER_REGISTER)]
@@ -53,6 +63,8 @@ namespace EventoApi.Controllers {
                 return Created(ACCOUNT_CONTROLLER_ACCOUNT, null);
             } catch (UserAlreadyExistsException) {
                 return Conflict();
+            } catch (EnumWrongValueException) {
+                return BadRequest();
             }
         }
 

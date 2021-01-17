@@ -6,6 +6,7 @@ using EventoInfrastructure.Mappers;
 using EventoInfrastructure.Repositories;
 using EventoInfrastructure.Services.Events;
 using EventoInfrastructure.Services.Jwt;
+using EventoInfrastructure.Services.Tickets;
 using EventoInfrastructure.Services.Users;
 using EventoInfrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -68,6 +69,7 @@ namespace EventoApi {
             services.AddScoped<IUserRepository, InMemoryUserRepository>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITicketService, TicketService>();
         }
 
         private void SetupSingletonServices(IServiceCollection services) {

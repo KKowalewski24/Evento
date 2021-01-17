@@ -21,10 +21,21 @@ namespace EventoInfrastructure.Mappers {
         }
 
         private static void ConfigureEventMapping(IMapperConfigurationExpression config) {
-            config.CreateMap<Event, EventDTO>().ForMember(
-                (eventDto) => eventDto.TicketsCount,
-                (memberConfig) => memberConfig.MapFrom((a) => a.Tickets.Count())
-            );
+            config.CreateMap<Event, EventDTO>()
+                .ForMember(
+                    (eventDto) => eventDto.TicketsCount,
+                    (memberConfig) => memberConfig.MapFrom((@event) => @event.Tickets.Count())
+                ).ForMember(
+                    (eventDto) => eventDto.PurchasedTicketsCount,
+                    (memberConfig) => {
+                        memberConfig.MapFrom((@event) => @event.PurchasedTickets.Count());
+                    }
+                ).ForMember(
+                    (eventDto) => eventDto.AvailableTicketsCount,
+                    (memberConfig) => {
+                        memberConfig.MapFrom((@event) => @event.AvailableTickets.Count());
+                    }
+                );
 
             config.CreateMap<Event, EventDetailsDTO>();
         }
@@ -35,6 +46,7 @@ namespace EventoInfrastructure.Mappers {
 
         private static void ConfigureTicketMapping(IMapperConfigurationExpression config) {
             config.CreateMap<Ticket, TicketDTO>();
+            config.CreateMap<Ticket, TicketDetailsDTO>();
         }
 
     }

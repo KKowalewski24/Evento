@@ -11,13 +11,16 @@ namespace EventoInfrastructure.DTO.Events {
         public DateTime UpdateDate { get; set; }
         public DateTime EndDate { get; set; }
         public int TicketsCount { get; set; }
+        public int PurchasedTicketsCount { get; set; }
+        public int AvailableTicketsCount { get; set; }
 
         /*------------------------ METHODS REGION ------------------------*/
         public EventDTO() {
         }
 
         public EventDTO(Guid id, string name, string description, DateTime startDate,
-                        DateTime updateDate, DateTime endDate, int ticketsCount)
+                        DateTime updateDate, DateTime endDate, int ticketsCount,
+                        int purchasedTicketsCount, int availableTicketsCount)
             : base(id) {
             Name = name;
             Description = description;
@@ -25,6 +28,8 @@ namespace EventoInfrastructure.DTO.Events {
             UpdateDate = updateDate;
             EndDate = endDate;
             TicketsCount = ticketsCount;
+            PurchasedTicketsCount = purchasedTicketsCount;
+            AvailableTicketsCount = availableTicketsCount;
         }
 
         public override string ToString() {
@@ -34,7 +39,9 @@ namespace EventoInfrastructure.DTO.Events {
                    $"{nameof(StartDate)}: {StartDate}, " +
                    $"{nameof(UpdateDate)}: {UpdateDate}, " +
                    $"{nameof(EndDate)}: {EndDate}, " +
-                   $"{nameof(TicketsCount)}: {TicketsCount}";
+                   $"{nameof(TicketsCount)}: {TicketsCount}, " +
+                   $"{nameof(PurchasedTicketsCount)}: {PurchasedTicketsCount}, " +
+                   $"{nameof(AvailableTicketsCount)}: {AvailableTicketsCount}, ";
         }
 
     }

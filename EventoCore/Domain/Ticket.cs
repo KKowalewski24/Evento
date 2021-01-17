@@ -1,4 +1,5 @@
 ﻿using System;
+using EventoCore.Exceptions.Tickets;
 
 namespace EventoCore.Domain {
 
@@ -10,8 +11,8 @@ namespace EventoCore.Domain {
         public Guid EventId { get; private set; }
         public Guid? UserId { get; private set; }
         public string UserName { get; private set; }
-        public DateTime? PurchaseData { get; private set; }
-        public bool IsPurchased => PurchaseData.HasValue;
+        public DateTime? PurchaseDate { get; private set; }
+        public bool IsPurchased => PurchaseDate.HasValue;
 
         /*------------------------ METHODS REGION ------------------------*/
         protected Ticket() {
@@ -36,7 +37,7 @@ namespace EventoCore.Domain {
             EventId = eventId;
             UserId = userId;
             UserName = userName;
-            PurchaseData = DateTime.UtcNow;
+            PurchaseDate = DateTime.UtcNow;
         }
 
         public Ticket(Guid id, int seatNumber, double price, Guid eventId,
@@ -47,14 +48,34 @@ namespace EventoCore.Domain {
             EventId = eventId;
             UserId = userId;
             UserName = userName;
-            PurchaseData = DateTime.UtcNow;
+            PurchaseDate = DateTime.UtcNow;
+        }
+
+        public void Purchase(User user) {
+            if (IsPurchased) {
+                throw new TicketAlreadyPurchased();
+            }
+
+            UserId = user.Id;
+            UserName = user.Name;
+            PurchaseDate = DateTime.UtcNow;
+        }
+
+        public void Cancel() {
+            if (!IsPurchased) {
+                throw new TicketNotPurchased();
+            }
+
+            UserId = null;
+            UserName = null;
+            PurchaseDate = null;
         }
 
         protected bool Equals(Ticket other) {
             return base.Equals(other) && SeatNumber == other.SeatNumber &&
                    Price.Equals(other.Price) && EventId.Equals(other.EventId) &&
                    Nullable.Equals(UserId, other.UserId) && UserName == other.UserName &&
-                   Nullable.Equals(PurchaseData, other.PurchaseData);
+                   Nullable.Equals(PurchaseDate, other.PurchaseDate);
         }
 
         public override bool Equals(object obj) {
@@ -81,7 +102,7 @@ namespace EventoCore.Domain {
                 hashCode = (hashCode * 397) ^ EventId.GetHashCode();
                 hashCode = (hashCode * 397) ^ UserId.GetHashCode();
                 hashCode = (hashCode * 397) ^ (UserName != null ? UserName.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ PurchaseData.GetHashCode();
+                hashCode = (hashCode * 397) ^ PurchaseDate.GetHashCode();
                 return hashCode;
             }
         }
@@ -93,7 +114,7 @@ namespace EventoCore.Domain {
                    $"{nameof(EventId)}: {EventId}, " +
                    $"{nameof(UserId)}: {UserId}, " +
                    $"{nameof(UserName)}: {UserName}, " +
-                   $"{nameof(PurchaseData)}: {PurchaseData}, " +
+                   $"{nameof(PurchaseDate)}: {PurchaseDate}, " +
                    $"{nameof(IsPurchased)}: {IsPurchased}";
         }
 
