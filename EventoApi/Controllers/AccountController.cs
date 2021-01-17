@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventoCore.Exceptions.Enums;
 using EventoCore.Extensions;
 using EventoInfrastructure.Commands.Users;
 using EventoInfrastructure.Exceptions;
@@ -62,6 +63,8 @@ namespace EventoApi.Controllers {
                 return Created(ACCOUNT_CONTROLLER_ACCOUNT, null);
             } catch (UserAlreadyExistsException) {
                 return Conflict();
+            } catch (EnumWrongValueException) {
+                return BadRequest();
             }
         }
 
