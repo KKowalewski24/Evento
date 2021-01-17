@@ -92,7 +92,7 @@ namespace EventoCore.Domain {
         }
 
         public void CancelPurchasedTickets(User user, int amount) {
-            IEnumerable<Ticket> tickets = PurchasedTickets.Where((ticket) => ticket.UserId == user.Id);
+            IEnumerable<Ticket> tickets = GetTicketsPurchasedByUser(user);
             if (tickets.Count() < amount) {
                 throw new TicketsNotEnoughException();
             }
@@ -100,6 +100,10 @@ namespace EventoCore.Domain {
             foreach (Ticket ticket in tickets.Take(amount)) {
                 ticket.Cancel();
             }
+        }
+
+        public IEnumerable<Ticket> GetTicketsPurchasedByUser(User user) {
+            return PurchasedTickets.Where((ticket) => ticket.UserId == user.Id);
         }
 
         protected bool Equals(Event other) {
