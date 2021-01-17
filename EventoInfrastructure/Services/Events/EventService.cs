@@ -7,6 +7,7 @@ using EventoCore.Repositories;
 using EventoInfrastructure.DTO.Events;
 using EventoInfrastructure.Exceptions.Events;
 using EventoInfrastructure.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace EventoInfrastructure.Services.Events {
 
@@ -16,10 +17,14 @@ namespace EventoInfrastructure.Services.Events {
         private readonly IEventRepository _eventRepository;
         private readonly IMapper _mapper;
 
+        private readonly ILogger<EventService> _logger;
+
         /*------------------------ METHODS REGION ------------------------*/
-        public EventService(IEventRepository eventRepository, IMapper mapper) {
+        public EventService(IEventRepository eventRepository, IMapper mapper,
+                            ILogger<EventService> logger) {
             _eventRepository = eventRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<EventDetailsDTO> GetByIdAsync(Guid id) {
@@ -31,6 +36,7 @@ namespace EventoInfrastructure.Services.Events {
         }
 
         public async Task<IEnumerable<EventDTO>> SearchByNameAsync(string name = null) {
+            _logger.LogInformation("Fetching Events");
             return _mapper.Map<IEnumerable<EventDTO>>(
                 await _eventRepository.SearchByNameAsync(name)
             );
