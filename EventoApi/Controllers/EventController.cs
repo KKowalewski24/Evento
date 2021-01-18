@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventoInfrastructure.Commands.Events;
+using EventoInfrastructure.DTO.Events;
 using EventoInfrastructure.Exceptions.Events;
 using EventoInfrastructure.Services.Events;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using static EventoApi.Constants.Constants;
 
 namespace EventoApi.Controllers {
@@ -14,16 +17,27 @@ namespace EventoApi.Controllers {
     public class EventController : Controller {
 
         /*------------------------ FIELDS REGION ------------------------*/
+        public const string CacheKeyEvents = "events";
+
         private readonly IEventService _eventService;
+        private readonly IMemoryCache _memoryCache;
 
         /*------------------------ METHODS REGION ------------------------*/
-        public EventController(IEventService eventService) {
+        public EventController(IEventService eventService, IMemoryCache memoryCache) {
             _eventService = eventService;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(string name) {
-            return Json(await _eventService.SearchByNameAsync(name));
+            IEnumerable<EventDTO> events = _memoryCache.Get<IEnumerable<EventDTO>>(CacheKeyEvents);
+
+            if (events == null) {
+                events = await _eventService.SearchByNameAsync(name);
+                _memoryCache.Set(CacheKeyEvents, events, TimeSpan.FromMinutes(1));
+            }
+
+            return Json(events);
         }
 
         [HttpGet(EVENT_CONTROLLER_PARAM_EVENT_ID)]

@@ -39,16 +39,10 @@ namespace EventoApi {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddControllers();
-            services.AddAuthorization((option) => {
-                option.AddPolicy(
-                    POLICY_HAS_ADMIN_ROLE,
-                    (policy) => policy.RequireRole(UserRole.Admin.FromEnumToString())
-                );
-            });
             SetupScopedServices(services);
             SetupSingletonServices(services);
             SetupAuthentication(services);
+            SetupOthers(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,6 +86,17 @@ namespace EventoApi {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securityKey))
                 };
             });
+        }
+
+        private void SetupOthers(IServiceCollection services) {
+            services.AddControllers();
+            services.AddAuthorization((option) => {
+                option.AddPolicy(
+                    POLICY_HAS_ADMIN_ROLE,
+                    (policy) => policy.RequireRole(UserRole.Admin.FromEnumToString())
+                );
+            });
+            services.AddMemoryCache();
         }
 
     }
