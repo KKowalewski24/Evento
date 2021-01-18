@@ -5,6 +5,7 @@ using EventoCore.Repositories;
 using EventoInfrastructure.Mappers;
 using EventoInfrastructure.Repositories;
 using EventoInfrastructure.Services.Events;
+using EventoInfrastructure.Services.Initializers;
 using EventoInfrastructure.Services.Jwt;
 using EventoInfrastructure.Services.Tickets;
 using EventoInfrastructure.Services.Users;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using static EventoApi.Constants.Constants;
 
@@ -51,11 +53,8 @@ namespace EventoApi {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            SetupApplicationBuilder(app);
+            SeedData(app);
         }
 
         private void SetupScopedServices(IServiceCollection services) {
@@ -64,9 +63,11 @@ namespace EventoApi {
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITicketService, TicketService>();
+            services.AddScoped<IDataInitializer, DataInitializer>();
         }
 
         private void SetupSingletonServices(IServiceCollection services) {
+            services.Configure<AppSettings>(Configuration.GetSection("App"));
             services.AddSingleton(AutoMapperConfig.Initialize());
             services.AddSingleton<IJwtService, JwtService>();
             services.AddSingleton(new JwtSettings(_securityKey, _applicationUrl, _expiryTimeInMinutes));
@@ -97,6 +98,24 @@ namespace EventoApi {
                 );
             });
             services.AddMemoryCache();
+        }
+
+        private void SetupApplicationBuilder(IApplicationBuilder app) {
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
+
+        private void SeedData(IApplicationBuilder app) {
+            IOptions<AppSettings> appSettings = app.ApplicationServices
+                .GetService<IOptions<AppSettings>>();
+            if (appSettings.Value.SeedData) {
+                app.ApplicationServices
+                    .GetService<IDataInitializer>()
+                    .SeedDataAsync();
+            }
         }
 
     }
