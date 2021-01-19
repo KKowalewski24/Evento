@@ -5,6 +5,7 @@ using EventoCore.Repositories;
 using EventoInfrastructure.Mappers;
 using EventoInfrastructure.Repositories;
 using EventoInfrastructure.Services.Events;
+using EventoInfrastructure.Services.Initializers;
 using EventoInfrastructure.Services.Jwt;
 using EventoInfrastructure.Services.Tickets;
 using EventoInfrastructure.Services.Users;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using static EventoApi.Constants.Constants;
 
@@ -39,16 +41,10 @@ namespace EventoApi {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddControllers();
-            services.AddAuthorization((option) => {
-                option.AddPolicy(
-                    POLICY_HAS_ADMIN_ROLE,
-                    (policy) => policy.RequireRole(UserRole.Admin.FromEnumToString())
-                );
-            });
             SetupScopedServices(services);
             SetupSingletonServices(services);
             SetupAuthentication(services);
+            SetupOthers(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,11 +53,8 @@ namespace EventoApi {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            SetupApplicationBuilder(app);
+            SeedData(app);
         }
 
         private void SetupScopedServices(IServiceCollection services) {
@@ -70,9 +63,11 @@ namespace EventoApi {
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITicketService, TicketService>();
+            services.AddScoped<IDataInitializer, DataInitializer>();
         }
 
         private void SetupSingletonServices(IServiceCollection services) {
+            services.Configure<AppSettings>(Configuration.GetSection("App"));
             services.AddSingleton(AutoMapperConfig.Initialize());
             services.AddSingleton<IJwtService, JwtService>();
             services.AddSingleton(new JwtSettings(_securityKey, _applicationUrl, _expiryTimeInMinutes));
@@ -92,6 +87,35 @@ namespace EventoApi {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securityKey))
                 };
             });
+        }
+
+        private void SetupOthers(IServiceCollection services) {
+            services.AddControllers();
+            services.AddAuthorization((option) => {
+                option.AddPolicy(
+                    POLICY_HAS_ADMIN_ROLE,
+                    (policy) => policy.RequireRole(UserRole.Admin.FromEnumToString())
+                );
+            });
+            services.AddMemoryCache();
+        }
+
+        private void SetupApplicationBuilder(IApplicationBuilder app) {
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
+
+        private void SeedData(IApplicationBuilder app) {
+            IOptions<AppSettings> appSettings = app.ApplicationServices
+                .GetService<IOptions<AppSettings>>();
+            if (appSettings.Value.SeedData) {
+                app.ApplicationServices
+                    .GetService<IDataInitializer>()
+                    .SeedDataAsync();
+            }
         }
 
     }
